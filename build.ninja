@@ -1,5 +1,5 @@
 cxx = g++
-cflags = -Iinclude -D__STDC_LIMIT_MACROS -D__STDC_CONSTANT_MACROS -lLLVMCore
+cflags = -Iinclude -Iout `llvm-config --libs core jit native --cxxflags --ldflags`
 
 rule flex
     command = flex -o $out $in 
