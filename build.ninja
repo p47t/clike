@@ -1,4 +1,16 @@
+cxx = g++
+cinclude = /usr/local/include
+cflags = -I$cinclude -D__STDC_LIMIT_MACROS -D__STDC_CONSTANT_MACROS -lLLVMCore
+
 rule flex
     command = flex -o $out $in 
 
+rule bison
+    command = bison -d -o $out $in
+
+rule cxx
+    command = $cxx $cflags -o $out $in
+
 build tokens.cpp: flex tokens.l
+build parser.cpp: bison parser.y 
+build parser: cxx parser.cpp tokens.cpp main.cpp
