@@ -12,4 +12,4 @@ rule cxx
 
 build out/tokens.cpp: flex src/tokens.l
 build out/parser.cpp: bison src/parser.y 
-build out/parser: cxx out/parser.cpp out/tokens.cpp src/main.cpp
+build out/parser: cxx out/parser.cpp out/tokens.cpp src/codegen.cpp src/main.cpp

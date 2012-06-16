@@ -2,9 +2,9 @@
 #include <vector>
 #include <llvm/Value.h>
 
-class CodeGenContext;
-
 namespace clike {
+
+class CodeGenContext;
 
 class NStatement;
 class NExpression;
@@ -43,17 +43,17 @@ public:
 class NIdentifier : public NExpression {
 public:
     std::string name;
-    NIdentifier(const std::string& name) : name(name) { }
+    NIdentifier(std::string& name) : name(name) { }
     virtual llvm::Value* codeGen(CodeGenContext& context);
 };
 
 class NMethodCall : public NExpression {
 public:
-    const NIdentifier& id;
+    NIdentifier& id;
     ExpressionList arguments;
-    NMethodCall(const NIdentifier& id, ExpressionList& arguments) :
+    NMethodCall(NIdentifier& id, ExpressionList& arguments) :
         id(id), arguments(arguments) { }
-    NMethodCall(const NIdentifier& id) : id(id) { }
+    NMethodCall(NIdentifier& id) : id(id) { }
     virtual llvm::Value* codeGen(CodeGenContext& context);
 };
 
@@ -93,12 +93,12 @@ public:
 
 class NVariableDeclaration : public NStatement {
 public:
-    const NIdentifier& type;
+    NIdentifier& type;
     NIdentifier& id;
     NExpression *assignmentExpr;
-    NVariableDeclaration(const NIdentifier& type, NIdentifier& id) :
+    NVariableDeclaration(NIdentifier& type, NIdentifier& id) :
         type(type), id(id) { }
-    NVariableDeclaration(const NIdentifier& type, NIdentifier& id, NExpression *assignmentExpr) :
+    NVariableDeclaration(NIdentifier& type, NIdentifier& id, NExpression *assignmentExpr) :
         type(type), id(id), assignmentExpr(assignmentExpr) { }
     virtual llvm::Value* codeGen(CodeGenContext& context);
 };
@@ -110,7 +110,7 @@ public:
     VariableList arguments;
     NBlock& block;
     NFunctionDeclaration(const NIdentifier& type, const NIdentifier& id,
-            const VariableList& arguments, NBlock& block) :
+            VariableList& arguments, NBlock& block) :
         type(type), id(id), arguments(arguments), block(block) { }
     virtual llvm::Value* codeGen(CodeGenContext& context);
 };
