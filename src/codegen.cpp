@@ -32,13 +32,11 @@ void CodeGenContext::generateCode(NBlock& root)
 }
 
 /* Executes the AST by running the main function */
-GenericValue CodeGenContext::runCode() {
+void CodeGenContext::runCode() {
     std::cout << "Running code...\n";
-    ExecutionEngine *ee = ExecutionEngine::create(module, false);
-    vector<GenericValue> noargs;
-    GenericValue v = ee->runFunction(mainFunction, noargs);
+    PassManager PM;
+    PM.run(*module);
     std::cout << "Code was run.\n";
-    return v;
 }
 
 /* Returns an LLVM type based on the identifier */
