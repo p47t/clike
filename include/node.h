@@ -3,6 +3,9 @@
 #include <llvm/Value.h>
 
 class CodeGenContext;
+
+namespace clike {
+
 class NStatement;
 class NExpression;
 class NVariableDeclaration;
@@ -111,3 +114,5 @@ public:
         type(type), id(id), arguments(arguments), block(block) { }
     virtual llvm::Value* codeGen(CodeGenContext& context);
 };
+
+}

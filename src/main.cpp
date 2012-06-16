@@ -1,5 +1,8 @@
 #include <iostream>
 #include "node.h"
+
+using namespace clike;
+
 extern NBlock* programBlock;
 extern int yyparse();
 
