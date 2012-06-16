@@ -1,0 +1,4 @@
+rule flex
+    command = flex -o $out $in 
+
+build tokens.cpp: flex tokens.l
