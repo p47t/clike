@@ -1,5 +1,5 @@
 cxx = g++
-cflags = -Iinclude -Iout `llvm-config --libs core jit native --cxxflags --ldflags`
+cflags = -g -Iinclude -Iout -I/usr/local/include -D_GNU_SOURCE -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS -fno-exceptions -fno-rtti -fno-common -Woverloaded-virtual -Wcast-qual -L/usr/local/lib  -lpthread -lm -lLLVMX86Disassembler -lLLVMX86AsmParser -lLLVMX86CodeGen -lLLVMX86Desc -lLLVMSelectionDAG -lLLVMAsmPrinter -lLLVMMCParser -lLLVMX86AsmPrinter -lLLVMX86Utils -lLLVMX86Info -lLLVMJIT -lLLVMExecutionEngine -lLLVMCodeGen -lLLVMScalarOpts -lLLVMInstCombine -lLLVMTransformUtils -lLLVMipa -lLLVMAnalysis -lLLVMTarget -lLLVMMC -lLLVMCore -lLLVMSupport 
 
 rule flex
     command = flex -o $out $in 
