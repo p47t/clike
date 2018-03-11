@@ -2,7 +2,7 @@
     #include "node.h"
     using namespace clike;
 
-    NBlock *programBlock; /* the top level root node of our final AST */
+    NBlock* programBlock; /* the top level root node of our final AST */
 
     extern int yylex();
     void yyerror(const char *s) { printf("ERROR: %s\n", s); }
@@ -10,15 +10,15 @@
 
 /* Represents the many different ways we can access our data */
 %union {
-    clike::Node *node;
-    clike::NBlock *block;
-    clike::NExpression *expr;
-    clike::NStatement *stmt;
-    clike::NIdentifier *ident;
-    clike::NVariableDeclaration *var_decl;
-    std::vector<clike::NVariableDeclaration*> *varvec;
-    std::vector<clike::NExpression*> *exprvec;
-    std::string *string;
+    clike::Node* node;
+    clike::NBlock* block;
+    clike::NExpression* expr;
+    clike::NStatement* stmt;
+    clike::NIdentifier* ident;
+    clike::NVariableDeclaration* var_decl;
+    std::vector<clike::NVariableDeclaration*>* varvec;
+    std::vector<clike::NExpression*>* exprvec;
+    std::string* string;
     int token;
 }
 

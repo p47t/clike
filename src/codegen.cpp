@@ -12,8 +12,8 @@ void CodeGenContext::generateCode(NBlock& root) {
     /* Create the top level interpreter function to call as entry */
     vector <Type*> argTypes;
     FunctionType* ftype = FunctionType::get(Type::getVoidTy(getGlobalContext()), argTypes, false);
-    mainFunction = Function::Create(ftype, GlobalValue::InternalLinkage, "main", module);
-    BasicBlock* bblock = BasicBlock::Create(getGlobalContext(), "entry", mainFunction, 0);
+    mMainFunction = Function::Create(ftype, GlobalValue::InternalLinkage, "main", mModule);
+    BasicBlock* bblock = BasicBlock::Create(getGlobalContext(), "entry", mMainFunction, 0);
 
     /* Push a new variable/block context */
     pushBlock(bblock);
@@ -27,14 +27,14 @@ void CodeGenContext::generateCode(NBlock& root) {
     std::cout << "Code is generated.\n";
     PassManager pm;
     pm.add(createPrintModulePass(&outs()));
-    pm.run(*module);
+    pm.run(*mModule);
 }
 
 /* Executes the AST by running the main function */
 void CodeGenContext::runCode() {
     std::cout << "Running code...\n";
     PassManager PM;
-    PM.run(*module);
+    PM.run(*mModule);
     std::cout << "Code was run.\n";
 }
 
@@ -71,7 +71,7 @@ Value* NIdentifier::codeGen(CodeGenContext& context) {
 }
 
 Value* NMethodCall::codeGen(CodeGenContext& context) {
-    Function* function = context.module->getFunction(id.name.c_str());
+    Function* function = context.mModule->getFunction(id.name.c_str());
     if (function == NULL) {
         std::cerr << "no such function " << id.name << std::endl;
     }
@@ -89,19 +89,19 @@ Value* NBinaryOperator::codeGen(CodeGenContext& context) {
     std::cout << "Creating binary operation " << op << std::endl;
     Instruction::BinaryOps instr;
     switch (op) {
-    case TPLUS:         
+    case TPLUS:
         instr = Instruction::Add;
         goto math;
 
-    case TMINUS:        
+    case TMINUS:
         instr = Instruction::Sub;
         goto math;
 
-    case TMUL:          
+    case TMUL:
         instr = Instruction::Mul;
         goto math;
 
-    case TDIV:          
+    case TDIV:
         instr = Instruction::SDiv;
         goto math;
 
@@ -159,7 +159,7 @@ Value* NFunctionDeclaration::codeGen(CodeGenContext& context) {
         argTypes.push_back(typeOf((**it).type));
     }
     FunctionType* ftype = FunctionType::get(typeOf(type), argTypes, false);
-    Function* function = Function::Create(ftype, GlobalValue::InternalLinkage, id.name.c_str(), context.module);
+    Function* function = Function::Create(ftype, GlobalValue::InternalLinkage, id.name.c_str(), context.mModule);
     BasicBlock* bblock = BasicBlock::Create(getGlobalContext(), "entry", function, 0);
 
     context.pushBlock(bblock);
@@ -175,3 +175,4 @@ Value* NFunctionDeclaration::codeGen(CodeGenContext& context) {
     std::cout << "Creating function: " << id.name << std::endl;
     return function;
 }
+

@@ -33,12 +33,13 @@ class CodeGenContext {
     // (because instructions are added to blocks)
     std::stack <CodeGenBlock*> blocks;
 
-    Function* mainFunction;
+    Function* mMainFunction;
 
 public:
-    Module* module;
+    Module* mModule;
+
     CodeGenContext() {
-        module = new Module("main", getGlobalContext());
+        mModule = new Module("main", getGlobalContext());
     }
 
     void generateCode(NBlock& root);
