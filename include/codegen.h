@@ -1,22 +1,5 @@
 #include <stack>
-#include <llvm/Module.h>
-#include <llvm/Function.h>
-#include <llvm/Type.h>
-#include <llvm/DerivedTypes.h>
-#include <llvm/LLVMContext.h>
-#include <llvm/PassManager.h>
-#include <llvm/Instructions.h>
-#include <llvm/CallingConv.h>
-#include <llvm/Bitcode/ReaderWriter.h>
-#include <llvm/Analysis/Verifier.h>
-#include <llvm/Assembly/PrintModulePass.h>
-#include <llvm/Support/IRBuilder.h>
-#include <llvm/Module.h>
-#include <llvm/ExecutionEngine/GenericValue.h>
-#include <llvm/ExecutionEngine/JIT.h>
-#include <llvm/Support/raw_ostream.h>
-
-using namespace llvm;
+#include <map>
 
 namespace clike {
 
@@ -24,8 +7,8 @@ class NBlock;
 
 class CodeGenBlock {
 public:
-    BasicBlock* block;
-    std::map <std::string, Value*> locals;
+    llvm::BasicBlock* block;
+    std::map <std::string, llvm::Value*> locals;
 };
 
 class CodeGenContext {
@@ -33,27 +16,25 @@ class CodeGenContext {
     // (because instructions are added to blocks)
     std::stack <CodeGenBlock*> blocks;
 
-    Function* mMainFunction;
+    llvm::Function* mMainFunction;
 
 public:
-    Module* mModule;
+    llvm::Module* mModule;
 
-    CodeGenContext() {
-        mModule = new Module("main", getGlobalContext());
-    }
+    CodeGenContext();
 
     void generateCode(NBlock& root);
     void runCode();
 
-    std::map <std::string, Value*>& locals() {
+    std::map <std::string, llvm::Value*>& locals() {
         return blocks.top()->locals;
     }
 
-    BasicBlock* currentBlock() {
+    llvm::BasicBlock* currentBlock() {
         return blocks.top()->block;
     }
 
-    void pushBlock(BasicBlock* block) {
+    void pushBlock(llvm::BasicBlock* block) {
         blocks.push(new CodeGenBlock());
         blocks.top()->block = block;
     }

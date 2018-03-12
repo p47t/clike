@@ -1,6 +1,6 @@
 #include <iostream>
 #include <vector>
-#include <llvm/Value.h>
+#include <llvm/IR/Value.h>
 
 namespace clike {
 class CodeGenContext;
@@ -19,6 +19,7 @@ public:
     }
 
     virtual llvm::Value* codeGen(CodeGenContext& context) {
+        return nullptr;
     }
 };
 

@@ -1,9 +1,35 @@
 #include "node.h"
 #include "codegen.h"
 #include "parser.hpp"
+#include <llvm/IR/Module.h>
+#include <llvm/IR/Function.h>
+#include <llvm/IR/Type.h>
+#include <llvm/IR/LLVMContext.h>
+#include <llvm/IR/DerivedTypes.h>
+#include <llvm/IR/Instructions.h>
+#include <llvm/IR/CallingConv.h>
+#include <llvm/Bitcode/BitcodeReader.h>
+#include <llvm/Bitcode/BitcodeWriter.h>
+#include <llvm/IR/Verifier.h>
+#include <llvm/IR/IRBuilder.h>
+#include <llvm/ExecutionEngine/GenericValue.h>
+#include <llvm/Support/raw_ostream.h>
+#include <llvm/IR/LegacyPassManager.h>
+#include "llvm/IR/IRPrintingPasses.h"
 
 using namespace std;
+using namespace llvm;
 using namespace clike;
+
+LLVMContext llvmContext;
+
+LLVMContext& getGlobalContext() {
+    return llvmContext;
+}
+
+CodeGenContext::CodeGenContext() {
+    mModule = new Module("main", getGlobalContext());
+}
 
 /* Compile the AST into a module */
 void CodeGenContext::generateCode(NBlock& root) {
@@ -25,15 +51,15 @@ void CodeGenContext::generateCode(NBlock& root) {
         to see if our program compiled properly
         */
     std::cout << "Code is generated.\n";
-    PassManager pm;
-    pm.add(createPrintModulePass(&outs()));
+    llvm::legacy::PassManager pm;
+    pm.add(createPrintModulePass(outs()));
     pm.run(*mModule);
 }
 
 /* Executes the AST by running the main function */
 void CodeGenContext::runCode() {
     std::cout << "Running code...\n";
-    PassManager PM;
+    llvm::legacy::PassManager PM;
     PM.run(*mModule);
     std::cout << "Code was run.\n";
 }
@@ -141,7 +167,7 @@ Value* NExpressionStatement::codeGen(CodeGenContext& context) {
 
 Value* NVariableDeclaration::codeGen(CodeGenContext& context) {
     std::cout << "Creating variable declaration " << type.name << " " << id.name << std::endl;
-    AllocaInst* alloc = new AllocaInst(typeOf(type), id.name, context.currentBlock());
+    AllocaInst* alloc = new AllocaInst(typeOf(type), 0, nullptr, id.name, context.currentBlock());
 
     context.locals()[id.name] = alloc;
     if (assignmentExpr != NULL) {
