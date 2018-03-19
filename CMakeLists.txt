@@ -22,5 +22,4 @@ add_executable(parser
     src/main.cpp)
 
 target_include_directories(parser PRIVATE include ${CONAN_INCLUDE_DIRS} ${CMAKE_CURRENT_BINARY_DIR})
-message("CONAN_LIBS: ${CONAN_LIBS}")
 target_link_libraries(parser curses ${CONAN_LIBS})
