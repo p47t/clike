@@ -18,6 +18,7 @@ BISON_TARGET(Parser src/parser.y ${CMAKE_CURRENT_BINARY_DIR}/parser.cpp)
 file(GLOB HEADER_FILES include/*.h)
 
 set (CMAKE_CXX_STANDARD 11)
+add_definitions(-DYYERROR_VERBOSE)
 
 add_executable(parser
     ${FLEX_Lexer_OUTPUTS}
