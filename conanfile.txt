@@ -1,5 +1,0 @@
-[requires]
-LLVM/release_60@LLVM/release_60
-
-[generators]
-cmake
