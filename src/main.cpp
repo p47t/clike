@@ -1,4 +1,5 @@
 #include <iostream>
+#include <fstream>
 #include "node.h"
 #include "codegen.h"
 
@@ -10,8 +11,7 @@ extern int yyparse();
 int main(int argc, char **argv)
 {
     yyparse();
-    std::cout << programBlock << std::endl;
-    
+
     CodeGenContext context;
     context.generateCode(*programBlock);
     context.runCode();
